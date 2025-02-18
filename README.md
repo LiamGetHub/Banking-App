@@ -17,7 +17,7 @@ A C++ project demonstrating key programming concepts such as object-oriented pro
 
 1. **Clone the repository**:
    ```bash
-   git clone https://github.com/your-username/project-name.git
+   git clone https://github.com/LiamGetHub/Banking-App.git
    ```
 
 2. **Navigate to the project directory**:
