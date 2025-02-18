@@ -13,8 +13,6 @@ int main() {
 
     User u1;
 
-    std::string NAME = "test name john";
-
     u1.setName("NAME");
 
     cout << u1.getName() << endl;
