@@ -7,17 +7,16 @@ using namespace std;
 // main() function: where the execution of
 // C++ program begins
 int main() {
+
+    User testUser;
+
+    string name;
   
-    // This statement prints "Hello World"
-    //cout << "Hello World";
+    cout << "what is your name?: " << endl;
+    cin >> name;
 
-    User u1;
-
-    u1.setName("NAME");
-
-    cout << u1.getName() << endl;
-
-    //cout << "test" << endl;
+    testUser.setName(name);
+    cout << "Hello " << testUser.getName() <<"!" << endl;
 
     return 0;
 }
