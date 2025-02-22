@@ -62,6 +62,12 @@ class User {
             this->password = password;
         }
 
+        int getUserID() {
+            return this->userID;
+        }
+        void setUserID(int id){
+            this->userID = id;
+        }
 
     private:
         std::string name;
@@ -71,6 +77,7 @@ class User {
         std::string userName;
         std::string password;
         std::string adress; // no getter or setter for this. make a struct or class for this later depending.
+        int userID;
 };
 
 
