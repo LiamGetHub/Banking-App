@@ -17,6 +17,8 @@ class Account {
         virtual void deposit(double amount) = 0;
         virtual bool withdraw(double amount) = 0; // returns boolean value to indicate sucsess. Important to check for edge cases.
         virtual void calculateIntrest() = 0;
+        virtual void setIntrestRate() = 0;
+        virtual double getIntrestRate() = 0;
 
         double getBalence() {
             return this->balence;
