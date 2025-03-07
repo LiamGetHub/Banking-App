@@ -3,6 +3,7 @@
 #include "User.h"
 #include "stdlib.h"
 #include "Helper.h"
+#include "Bank.h"
 
 using namespace std;
 
@@ -14,14 +15,18 @@ int main() {
     int userInp;
 
     printChoices();
-    cin >> userInp;
+    std::cin >> userInp;
 
     string nameInp;
+    string lastNameInp;
     string emailInp;
     int phoneNumberInp;
     int ageInp;
     string usernameInp;
     string passwordInp;
+
+    //bank
+    Bank bank;
     
     do {
         
@@ -32,30 +37,48 @@ int main() {
 
                 break;
             case 2:
+                User* userPtr; // pointer to user to be returned by createAccount()
 
-                cout << "Please enter your name (first and last): " << endl;
-                cin >> nameInp;
-
-                cout << "Please enter your email: " << endl;
-                cin >> emailInp;
-
-                cout << "Please enter your phone number: " << endl;
-                cin >> phoneNumberInp;
-
-                cout << "Please enter your age " << endl;
-                cin >> ageInp;
-
-                cout << "Please enter your user name: " << endl;
-                cin >> usernameInp;
-
-                cout << "Please enter your passwrod: " << endl;
-                cin >> passwordInp;
-
-                std::cout << "name: " << nameInp << ". email: " << emailInp << ". phone number: " << phoneNumberInp << ". age: " << " email: " << emailInp
-                 << ". username: " << usernameInp << ". password: " << passwordInp << std::endl;
-
+                askUserAcctQuestions(nameInp, lastNameInp,emailInp,phoneNumberInp,ageInp, usernameInp,passwordInp);
+                userPtr = createAccount(nameInp, lastNameInp,emailInp,phoneNumberInp,ageInp, usernameInp,passwordInp);  // need to add to some type of db
+                bank.addUser(userPtr);
                 break;
             case 3:
+                cout << "A";
+
+                break;
+            
+            case 4:
+                cout << "A";
+
+                break;
+
+            case 5:
+                cout << "A";
+
+                break;
+
+            case 6:
+                //show user
+                bank.printAllUsers();
+
+                break;
+            
+            case 7:
+
+                break;
+
+            case 8:
+                cout << "A";
+
+                break;
+
+            case 9:
+                cout << "A";
+
+                break;
+
+            case 10:
                 cout << "A";
 
                 break;
@@ -66,11 +89,11 @@ int main() {
                 return 0;
         }
 
+        printChoices();
+        cin >> userInp;
 
     } while (userInp != 1);
     
 
     return 0;
 }
-
-

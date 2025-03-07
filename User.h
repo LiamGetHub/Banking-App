@@ -4,14 +4,28 @@
 #include <vector>
 #include <string>
 
+using namespace std;
+
 class User {
     public:
 
-       // Constructor to initialize username and password
-        User(const std::string& uname, const std::string& pwd) {
-            userName = uname;  // Initialize 'username' with the provided value. Later can randomize
-            password = pwd;    // Initialize 'password' with the provided value
-        };
+       // Constructor to initialize username and password User* user = new User(userID, name, email, phoneNum, ageVal, username, password);
+        // User(int userId, string name, string email, int phoneNum, int ageVal,string username, int password) {
+        //     userID = userId;
+        //     name = name;
+        //     email = email;
+        //     phoneNum = phoneNum;
+        //     age = ageVal;
+        //     userName = username;  // Initialize 'username' with the provided value. Later can randomize
+        //     password = password;    // Initialize 'password' with the provided value
+        // };
+
+        // Constructor that accepts all member variables
+        User(int id, const std::string& name, const std::string& email, 
+        int phoneNum, int age, const std::string& username, const std::string& password) 
+       : userID(id), name(name), email(email), phoneNum(phoneNum), 
+         age(age), userName(username), password(password) {}
+
         User() {
             userName = "uname";  // Initialize 'username' with the provided value. Later can randomize
             password = "pwd";    // Initialize 'password' with the provided value
