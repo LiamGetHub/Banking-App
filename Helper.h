@@ -129,4 +129,9 @@ void loadUsersFromCSV(unordered_map<int, User*>& users, const string& filename) 
     cout << "Users loaded from " << filename << " successfully!" << endl;
 }
 
+
+void onProgramClose(){
+    //save new users to csv file for data persistance
+    
+}
 #endif

@@ -42,6 +42,7 @@ int main() {
                 askUserAcctQuestions(nameInp, lastNameInp,emailInp,phoneNumberInp,ageInp, usernameInp,passwordInp);
                 userPtr = createAccount(nameInp, lastNameInp,emailInp,phoneNumberInp,ageInp, usernameInp,passwordInp);  // need to add to some type of db
                 bank.addUser(userPtr);
+                
                 break;
             case 3:
                 cout << "A";
