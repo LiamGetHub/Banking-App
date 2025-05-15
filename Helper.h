@@ -7,6 +7,9 @@
 #include <unordered_map>
 #include "User.h"
 #include <sstream>
+#include "Saving.h"
+#include "Account.h"
+
 
 using namespace std;
 
@@ -134,4 +137,33 @@ void onProgramClose(){
     //save new users to csv file for data persistance
     
 }
+
+
+void acountCreationChoices() {
+    cout << "what acount would you like to open?" << endl;
+    cout <<" 1. Savings" << endl;
+    cout << "2. Checkings" << endl;
+}
+
+Saving* createNewSavingAccount() {
+    // savings
+    Saving * savingsPtr;
+
+    //trouble with this line for some reson:
+    //savingsPtr = new Saving;
+
+    cout << "account name: TEST" << endl;
+    cout << "account ID: TEST" << endl;
+    cout << "Balence: TEST" << endl;
+
+
+    cout << "DEBUG:: Savings Acount Created Succsessfully" << endl;
+
+    return savingsPtr;
+}
+
+
+
+
+
 #endif

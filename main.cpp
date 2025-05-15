@@ -4,6 +4,7 @@
 #include "stdlib.h"
 #include "Helper.h"
 #include "Bank.h"
+#include "Saving.h"
 
 using namespace std;
 
@@ -45,7 +46,29 @@ int main() {
                 
                 break;
             case 3:
-                cout << "A";
+                int acctInp;
+
+                cout << "Open a bank acount"<<endl;
+
+                //what account would the user like to open
+                acountCreationChoices();
+
+                cin >> acctInp;
+
+                if (acctInp == 1) {
+                  createNewSavingAccount();
+
+                } else if ( acctInp == 2) {
+                    //checkings
+
+                } else {
+                    // enter correct input
+
+                }
+                
+                
+                //create that acount
+                // add to user object?
 
                 break;
             
