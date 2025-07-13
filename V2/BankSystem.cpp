@@ -1,8 +1,9 @@
 #include "BankSystem.h"
 #include <iostream>
 #include <fstream>
+#include <limits>
 
-BankSystem::BankSystem() : nextAccountNumber(1001) {
+BankSystem::BankSystem() : nextAccountNumber(1001), currentUser(nullptr) {
     loadAccounts();
 }
 
@@ -25,23 +26,6 @@ void BankSystem::saveAccounts() const {
     }
 }
 
-void BankSystem::createAccount() {
-    std::string name;
-    double initialDeposit;
-    std::cout << "Enter name: ";
-    std::cin.ignore();
-    std::getline(std::cin, name);
-    std::cout << "Enter initial deposit: ";
-    std::cin >> initialDeposit;
-
-    UserAccount acc(nextAccountNumber++, name, initialDeposit);
-    accounts.push_back(acc);
-    saveAccounts();
-
-    std::cout << "Account created.\n";
-    acc.display();
-}
-
 UserAccount* BankSystem::findAccount(int accountNumber) {
     for (auto& acc : accounts) {
         if (acc.getAccountNumber() == accountNumber) {
@@ -51,46 +35,127 @@ UserAccount* BankSystem::findAccount(int accountNumber) {
     return nullptr;
 }
 
-void BankSystem::depositToAccount() {
+void BankSystem::createAccount() {
+    std::string name;
+    double initialDeposit;
+    std::string password;
+
+    std::cout << "Enter name: ";
+    std::cin.ignore();
+    std::getline(std::cin, name);
+
+    std::cout << "Enter initial deposit: ";
+    std::cin >> initialDeposit;
+
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+    std::cout << "Create password: ";
+    std::getline(std::cin, password);
+
+    UserAccount acc(nextAccountNumber++, name, password, initialDeposit);
+    accounts.push_back(acc);
+    saveAccounts();
+
+    std::cout << "Account created.\n";
+    acc.display();
+}
+
+void BankSystem::login() {
     int accNum;
-    double amount;
+    std::string password;
+
     std::cout << "Enter account number: ";
     std::cin >> accNum;
 
+    std::cin.ignore();
+    std::cout << "Enter password: ";
+    std::getline(std::cin, password);
+
     UserAccount* acc = findAccount(accNum);
-    if (acc) {
-        std::cout << "Enter amount to deposit: ";
-        std::cin >> amount;
-        acc->deposit(amount);
-        saveAccounts();
-        std::cout << "Deposit successful.\n";
+    if (acc && acc->checkPassword(password)) {
+        currentUser = acc;
+        std::cout << "Login successful. Welcome, " << currentUser->getName() << "!\n";
     } else {
-        std::cout << "Account not found.\n";
+        std::cout << "Invalid credentials.\n";
     }
 }
 
-void BankSystem::withdrawFromAccount() {
-    int accNum;
-    double amount;
-    std::cout << "Enter account number: ";
-    std::cin >> accNum;
-
-    UserAccount* acc = findAccount(accNum);
-    if (acc) {
-        std::cout << "Enter amount to withdraw: ";
-        std::cin >> amount;
-        if (acc->withdraw(amount)) {
-            saveAccounts();
-            std::cout << "Withdrawal successful.\n";
-        } else {
-            std::cout << "Insufficient funds.\n";
-        }
+void BankSystem::logout() {
+    if (currentUser) {
+        std::cout << "User " << currentUser->getName() << " logged out.\n";
+        currentUser = nullptr;
     } else {
-        std::cout << "Account not found.\n";
+        std::cout << "No user is currently logged in.\n";
+    }
+}
+
+void BankSystem::depositToAccount() {
+    if (!currentUser) {
+        std::cout << "Please login first.\n";
+        return;
+    }
+    double amount;
+    std::cout << "Enter amount to deposit: ";
+    std::cin >> amount;
+    currentUser->deposit(amount);
+    saveAccounts();
+    std::cout << "Deposit successful.\n";
+}
+
+void BankSystem::withdrawFromAccount() {
+    if (!currentUser) {
+        std::cout << "Please login first.\n";
+        return;
+    }
+    double amount;
+    std::cout << "Enter amount to withdraw: ";
+    std::cin >> amount;
+    if (currentUser->withdraw(amount)) {
+        saveAccounts();
+        std::cout << "Withdrawal successful.\n";
+    } else {
+        std::cout << "Insufficient funds.\n";
+    }
+}
+
+
+void BankSystem::transferToAnotherAccount() {
+    if (!currentUser) {
+        std::cout << "Please login first.\n";
+        return;
+    }
+
+    int targetAccNum;
+    double amount;
+
+    std::cout << "Enter target account number: ";
+    std::cin >> targetAccNum;
+
+    if (targetAccNum == currentUser->getAccountNumber()) {
+        std::cout << "Cannot transfer to your own account.\n";
+        return;
+    }
+
+    UserAccount* target = findAccount(targetAccNum);
+    if (!target) {
+        std::cout << "Target account not found.\n";
+        return;
+    }
+
+    std::cout << "Enter amount to transfer: ";
+    std::cin >> amount;
+
+    if (currentUser->withdraw(amount)) {
+        target->deposit(amount);
+        saveAccounts();
+        std::cout << "Transfer successful! $" << amount << " sent to " << target->getName() << ".\n";
+    } else {
+        std::cout << "Insufficient funds.\n";
     }
 }
 
 void BankSystem::showAllAccounts() {
+    std::cout << "All Accounts:\n";
     for (const auto& acc : accounts) {
         acc.display();
     }
@@ -101,20 +166,26 @@ void BankSystem::run() {
     do {
         std::cout << "\n--- Banking Menu ---\n";
         std::cout << "1. Create Account\n";
-        std::cout << "2. Deposit\n";
-        std::cout << "3. Withdraw\n";
-        std::cout << "4. Show All Accounts\n";
-        std::cout << "5. Exit\n";
+        std::cout << "2. Login\n";
+        if (currentUser) {
+            std::cout << "3. Deposit\n";
+            std::cout << "4. Withdraw\n";
+            std::cout << "5. Transfer\n";
+            std::cout << "6. Logout\n";
+        }
+        std::cout << "0. Exit\n";
         std::cout << "Choice: ";
         std::cin >> choice;
 
         switch (choice) {
             case 1: createAccount(); break;
-            case 2: depositToAccount(); break;
-            case 3: withdrawFromAccount(); break;
-            case 4: showAllAccounts(); break;
-            case 5: std::cout << "Goodbye!\n"; break;
-            default: std::cout << "Invalid choice.\n";
+            case 2: login(); break;
+            case 3: if (currentUser) depositToAccount(); break;
+            case 4: if (currentUser) withdrawFromAccount(); break;
+            case 5: if (currentUser) transferToAnotherAccount(); break;
+            case 6: if (currentUser) logout(); break;
+            case 0: std::cout << "Exiting...\n"; break;
+            default: std::cout << "Invalid option.\n";
         }
-    } while (choice != 5);
+    } while (choice != 0);
 }

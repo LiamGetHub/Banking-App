@@ -8,10 +8,11 @@ private:
     int accountNumber;
     std::string name;
     double balance;
+    std::string passwordHash;
 
 public:
     UserAccount();
-    UserAccount(int accNum, const std::string& name, double balance);
+    UserAccount(int accNum, const std::string& name, const std::string& password, double balance);
 
     void deposit(double amount);
     bool withdraw(double amount);
@@ -23,6 +24,8 @@ public:
 
     std::string toFileString() const;
     static UserAccount fromFileString(const std::string& line);
+
+    bool checkPassword(const std::string& password) const;
 };
 
 #endif

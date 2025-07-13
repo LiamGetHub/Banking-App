@@ -1,11 +1,15 @@
 #include "UserAccount.h"
 #include <iostream>
 #include <sstream>
+#include <functional> // for std::hash
 
-UserAccount::UserAccount() : accountNumber(0), name(""), balance(0.0) {}
+UserAccount::UserAccount() : accountNumber(0), name(""), balance(0.0), passwordHash("") {}
 
-UserAccount::UserAccount(int accNum, const std::string& name, double balance)
-    : accountNumber(accNum), name(name), balance(balance) {}
+UserAccount::UserAccount(int accNum, const std::string& name, const std::string& password, double balance)
+    : accountNumber(accNum), name(name), balance(balance) {
+    std::hash<std::string> hasher;
+    passwordHash = std::to_string(hasher(password));
+}
 
 void UserAccount::deposit(double amount) {
     balance += amount;
@@ -37,15 +41,14 @@ double UserAccount::getBalance() const {
 
 std::string UserAccount::toFileString() const {
     std::ostringstream oss;
-    oss << accountNumber << "," << name << "," << balance;
+    oss << accountNumber << "," << name << "," << balance << "," << passwordHash;
     return oss.str();
 }
 
 UserAccount UserAccount::fromFileString(const std::string& line) {
     std::istringstream iss(line);
-    std::string token;
+    std::string token, name, passwordHash;
     int accNum;
-    std::string name;
     double balance;
 
     std::getline(iss, token, ',');
@@ -56,5 +59,15 @@ UserAccount UserAccount::fromFileString(const std::string& line) {
     std::getline(iss, token, ',');
     balance = std::stod(token);
 
-    return UserAccount(accNum, name, balance);
+    std::getline(iss, passwordHash, ',');
+
+    UserAccount acc(accNum, name, "", balance);
+    acc.passwordHash = passwordHash;
+
+    return acc;
+}
+
+bool UserAccount::checkPassword(const std::string& password) const {
+    std::hash<std::string> hasher;
+    return passwordHash == std::to_string(hasher(password));
 }
