@@ -1,0 +1,37 @@
+# --- C++ Build Artifacts ---
+*.exe
+*.obj
+*.o
+*.out
+*.log
+*.dll
+*.lib
+*.a
+
+# --- Backup & Temp Files ---
+*~
+*.bak
+*.tmp
+*.swp
+*.swo
+
+# --- MSYS2/MinGW Specific ---
+*.stackdump
+
+# --- VS Code Configs ---
+.vscode/
+
+# --- OS Files ---
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# --- Account Data (optional if accounts are generated locally) ---
+accounts.txt
+account_*.txt
+
+# --- CMake or Makefiles (if you generate them) ---
+CMakeFiles/
+CMakeCache.txt
+Makefile
+build/
